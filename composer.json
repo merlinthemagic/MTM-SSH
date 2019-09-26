@@ -1,0 +1,34 @@
+{
+	"name" : "merlinthemagic/mtm-ssh",
+	"type" : "library",
+	"description" : "SSH shell tools for PHP 7",
+	"version" : "0.0.1",
+	"keywords" : [
+		"ssh",
+		"shells",
+		"linux",
+		"bash",
+		"routeros"
+	],
+	"homepage" : "https://github.com/merlinthemagic/MTM-SSH",
+	"license" : "LGPL-3.0",
+	"authors" : [{
+			"name" : "Martin Peter Madsen",
+			"email" : "dev@martinpetermadsen.com",
+			"role" : "Developer"
+		}
+	],
+	"require" : {
+		"php" : ">=7.3.0",
+		"merlinthemagic/mtm-utilities" : ">=0.0.1",
+		"merlinthemagic/mtm-shells" : ">=0.0.1",
+		"merlinthemagic/mtm-network" : ">=0.0.1",
+		"merlinthemagic/mtm-encrypt" : ">=0.0.1"
+	},
+	"autoload" : {
+		"files" : [
+			"./Enable.php"
+		]
+	},
+	"minimum-stability" : "dev"
+}
