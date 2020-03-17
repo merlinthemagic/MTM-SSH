@@ -49,17 +49,17 @@ class Shells extends Base
 	}
 	public function getBashTool()
 	{
-		if (array_key_exists(__FUNCTION__, $this->_cStore) === false) {
-			$this->_cStore[__FUNCTION__]		= new \MTM\SSH\Tools\Shells\Bash\Actions();
+		if (array_key_exists(__FUNCTION__, $this->_s) === false) {
+			$this->_s[__FUNCTION__]		= new \MTM\SSH\Tools\Shells\Bash\Actions();
 		}
-		return $this->_cStore[__FUNCTION__];
+		return $this->_s[__FUNCTION__];
 	}
 	public function getRouterOsTool()
 	{
-		if (array_key_exists(__FUNCTION__, $this->_cStore) === false) {
-			$this->_cStore[__FUNCTION__]		= new \MTM\SSH\Tools\Shells\RouterOs\Actions();
+		if (array_key_exists(__FUNCTION__, $this->_s) === false) {
+			$this->_s[__FUNCTION__]		= new \MTM\SSH\Tools\Shells\RouterOs\Actions();
 		}
-		return $this->_cStore[__FUNCTION__];
+		return $this->_s[__FUNCTION__];
 	}
 	protected function getBaseShell()
 	{
