@@ -6,28 +6,49 @@ class Shells extends Base
 {
 	public function passwordAuthentication($ip, $user, $pass, $ctrlObj=null, $port=22, $timeout=30000)
 	{
-		//generic password authentication
-		if (is_object($ip) === false) {
-			$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
+		try {
+			//generic password authentication
+			if (is_object($ip) === false) {
+				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
+			}
+			if (is_object($ctrlObj) === false) {
+				$ctrlObj	= $this->getBaseShell();
+				$newBase	= true;
+			} else {
+				$newBase	= false;
+			}
+			return $this->getTool($ctrlObj)->passwordAuthenticate($ctrlObj, $ip, $user, $pass, $port, $timeout);
+		} catch (\Exception $e) {
+			if ($newBase === true) {
+				$ctrlObj->terminate();
+			}
+			throw $e;
 		}
-		if (is_object($ctrlObj) === false) {
-			$ctrlObj	= $this->getBaseShell();
-		}
-		return $this->getTool($ctrlObj)->passwordAuthenticate($ctrlObj, $ip, $user, $pass, $port, $timeout);
 	}
 	public function keyAuthentication($ip, $user, $key, $ctrlObj=null, $port=22, $timeout=30000)
 	{
-		//generic public key authentication
-		if (is_object($ip) === false) {
-			$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
+		try {
+			//generic public key authentication
+			if (is_object($ip) === false) {
+				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
+			}
+			if (is_object($key) === false) {
+				$key	= \MTM\Encrypt\Factories::getRSA()->getPrivateKey($key);
+			}
+			if (is_object($ctrlObj) === false) {
+				$ctrlObj	= $this->getBaseShell();
+				$newBase	= true;
+			} else {
+				$newBase	= false;
+			}
+			return $this->getTool($ctrlObj)->publicKeyAuthenticate($ctrlObj, $ip, $user, $key, $port, $timeout);
+		
+		} catch (\Exception $e) {
+			if ($newBase === true) {
+				$ctrlObj->terminate();
+			}
+			throw $e;
 		}
-		if (is_object($key) === false) {
-			$key	= \MTM\Encrypt\Factories::getRSA()->getPrivateKey($key);
-		}
-		if (is_object($ctrlObj) === false) {
-			$ctrlObj	= $this->getBaseShell();
-		}
-		return $this->getTool($ctrlObj)->publicKeyAuthenticate($ctrlObj, $ip, $user, $key, $port, $timeout);
 	}
 	public function getBash()
 	{

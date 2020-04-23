@@ -2,7 +2,7 @@
 	"name" : "merlinthemagic/mtm-ssh",
 	"type" : "library",
 	"description" : "SSH shell tools for PHP 7",
-	"version" : "0.0.2",
+	"version" : "0.0.3",
 	"keywords" : [
 		"ssh",
 		"shells",
