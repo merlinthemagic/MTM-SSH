@@ -12,14 +12,15 @@ class Shells extends Base
 				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
 			}
 			if (is_object($ctrlObj) === false) {
-				$ctrlObj	= $this->getBaseShell();
 				$newBase	= true;
+				$ctrlObj	= $this->getBaseShell();
 			} else {
 				$newBase	= false;
 			}
 			return $this->getTool($ctrlObj)->passwordAuthenticate($ctrlObj, $ip, $user, $pass, $port, $timeout);
+			
 		} catch (\Exception $e) {
-			if ($newBase === true) {
+			if ($newBase === true && is_object($ctrlObj) === true) {
 				$ctrlObj->terminate();
 			}
 			throw $e;
@@ -36,15 +37,15 @@ class Shells extends Base
 				$key	= \MTM\Encrypt\Factories::getRSA()->getPrivateKey($key);
 			}
 			if (is_object($ctrlObj) === false) {
-				$ctrlObj	= $this->getBaseShell();
 				$newBase	= true;
+				$ctrlObj	= $this->getBaseShell();
 			} else {
 				$newBase	= false;
 			}
 			return $this->getTool($ctrlObj)->publicKeyAuthenticate($ctrlObj, $ip, $user, $key, $port, $timeout);
 		
 		} catch (\Exception $e) {
-			if ($newBase === true) {
+			if ($newBase === true && is_object($ctrlObj) === true) {
 				$ctrlObj->terminate();
 			}
 			throw $e;
@@ -86,7 +87,11 @@ class Shells extends Base
 	{
 		$osTool		= \MTM\Utilities\Factories::getSoftware()->getOsTool();
 		if ($osTool->getType() == "linux") {
-			return \MTM\Shells\Factories::getShells()->getBash();
+			$ctrlObj	= \MTM\Shells\Factories::getShells()->getBash();
+			//trap the ssh conn exit, that way the user cannot drop into a local shell they did not create
+			$strCmd		= "trap \"trap - SIGCHLD; echo mtm-forced-exit; exit\" SIGCHLD";
+			$ctrlObj->getCmd($strCmd)->get();
+			return $ctrlObj;
 		} else {
 			throw new \Exception("Not handled");
 		}
