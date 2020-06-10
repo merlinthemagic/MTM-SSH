@@ -46,12 +46,21 @@ class PasswordAuthentication extends PublicKeyAuthentication
 				"Could not resolve hostname"						=> "error",
 				"Connection reset by peer"							=> "error",
 				"Connection timed out"								=> "error",
-				"Permission denied"									=> "error"
+				"Permission denied"									=> "error",
+				"Connection closed by remote host"					=> "error"
 		);
-		
 		$regEx	= "(" . implode("|", array_keys($regExs)) . ")";
-		$data	= $ctrlObj->getCmd($strCmd, $regEx, $timeout)->get();
+		try {
+			
+			$cmdObj	= $ctrlObj->getCmd($strCmd, $regEx, $timeout);
+			$data	= $cmdObj->get();
 		
+		} catch (\Exception $e) {
+			//can always peak in $cmdObj->getData() to see what was returned
+			//this connect is special because bash forms the base for most connects
+			throw $e;
+		}
+
 		$rValue	= null;
 		$rType	= null;
 		foreach ($regExs as $regEx => $type) {
