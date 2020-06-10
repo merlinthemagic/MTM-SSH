@@ -52,7 +52,8 @@ class PasswordAuthentication extends PublicKeyAuthentication
 		$regEx	= "(" . implode("|", array_keys($regExs)) . ")";
 		try {
 			
-			$cmdObj	= $ctrlObj->getCmd($strCmd, $regEx, $timeout);
+			$pad	= 5000; //we want the connect error
+			$cmdObj	= $ctrlObj->getCmd($strCmd, $regEx, ($timeout + $pad));
 			$data	= $cmdObj->get();
 		
 		} catch (\Exception $e) {
