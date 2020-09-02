@@ -47,7 +47,8 @@ class PasswordAuthentication extends PublicKeyAuthentication
 				"Connection reset by peer"							=> "error",
 				"Connection timed out"								=> "error",
 				"Permission denied"									=> "error",
-				"Connection closed by remote host"					=> "error"
+				"Connection closed by remote host"					=> "error",
+				"Connection refused"								=> "error",
 		);
 		$regEx	= "(" . implode("|", array_keys($regExs)) . ")";
 		try {
