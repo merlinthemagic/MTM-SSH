@@ -6,13 +6,11 @@ class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 {
 	protected function keyConnect($ctrlObj, $ipObj, $userName, $keyObj, $port=22, $timeout=30000)
 	{
-		if ($keyObj->getPassPhrase() === null) {
-			//we need to save the key to disk, because of this we always want the key protected
-			//if the user sends us an unencrypted key, we add a random passphrase
-			//if the system crashes before we can delete the key file its ok, since its encrypted
-			$passPhrase		= \MTM\Utilities\Factories::getStrings()->getRandomByRegex(40, "A-Za-z0-9\#\-\+\:\;\.\,\!\*");
-			$keyObj			= $keyObj->getEncryptedKey($passPhrase);
-		}
+		//we need to save the key to disk, because of this we always want the key protected
+		//we do not trust the user to generate a strong enough passphrase, so we make a new one
+		//if the system crashes before we can delete the key file its ok, since its encrypted
+		$passPhrase		= \MTM\Utilities\Factories::getStrings()->getRandomByRegex(40, "A-Za-z0-9\#\-\+\:\;\.\,\!\*");
+		$keyObj			= $keyObj->getEncryptedKey($passPhrase);
 		if ($ctrlObj->getType() == "bash") {
 			return $this->keyConnectFromBash($ctrlObj, $ipObj, $userName, $keyObj, $port, $timeout);
 		} else {
@@ -21,18 +19,33 @@ class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 	}
 	protected function keyConnectFromBash($ctrlObj, $ipObj, $userName, $keyObj, $port=22, $timeout=30000)
 	{
-		$keyFile		= \MTM\FS\Factories::getFiles()->getTempFile("pem")->setContent($keyObj->get());
-		$keyFile->setMode("0600");
-		
-		$strCmd	= "ssh";
-		$strCmd	.= " -i \"" . $keyFile->getPathAsString() . "\"";
+		$toSecs	= ceil($timeout / 1000);
+		if ($ctrlObj->getParent() === null) {
+			$keyFile	= \MTM\FS\Factories::getFiles()->getTempFile("pem")->setContent($keyObj->get());
+			$keyFile->setMode("0600");
+			$strCmd	= "ssh";
+			$strCmd	.= " -i \"".$keyFile->getPathAsString()."\"";
+		} else {
+			$dirObj	= $ctrlObj->getTempDirectory();
+			if ($dirObj === null) {
+				throw new \Exception("Missing writable directory on remote, cannot save key file");
+			}
+			$strCmd	= "mtmKey=\$(mktemp --tmpdir=".$dirObj->getPathAsString().");";
+			$strCmd	.= " echo -n '";
+			$strCmd	.= base64_encode($keyObj->get());
+			$strCmd	.= "' | base64 -d > \$mtmKey;";
+			$strCmd	.= " ( nohup sh -c 'sleep ".$toSecs."s && rm -rf \"\$0\"; ' \$mtmKey & ) > /dev/null 2>&1;";
+			$strCmd	.= " ssh";
+			$strCmd	.= " -i \$mtmKey";
+		}
+
 		$strCmd	.= " -p ".$port;
 		$strCmd	.= " -o \"PreferredAuthentications publickey\"";
 		$strCmd	.= " -o \"NumberOfPasswordPrompts 1\"";
-		$strCmd	.= " -o \"ConnectTimeout " .ceil($timeout / 1000). "\"";
+		$strCmd	.= " -o \"ConnectTimeout ".$toSecs."\"";
 		$strCmd	.= " -o \"ServerAliveInterval 60\"";
 		$strCmd	.= " -o \"ServerAliveCountMax 2628000\"";
-		
+
 		//the known_hosts file cannot be created by the webserver, so we use /dev/null
 		//src: http://linuxcommand.org/man_pages/ssh1.html search for "-o option"
 		//openSSH has hardcoded the use of the user home dir as the location for the .ssh dir;
@@ -43,9 +56,9 @@ class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 		$strCmd	.= " -o \"StrictHostKeyChecking no\"";
 		$strCmd	.= " -o \"GSSAPIAuthentication no\"";
 		$strCmd	.= " ".$userName."@".$ipObj->getAsString("std", false);
-		
+
 		$regExs	= array(
-				$userName . "@"										=> "linux",
+				$userName."@"										=> "linux",
 				"Enter passphrase for key"							=> "keyAuth",
 				"Microsoft Corporation"								=> "windows",
 				"Do you want to see the software license"			=> "routeros",

@@ -33,8 +33,12 @@ class Shells extends Base
 			if (is_object($ip) === false) {
 				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
 			}
-			if (is_object($key) === false) {
+			if (is_string($key) === true) {
 				$key	= \MTM\Encrypt\Factories::getRSA()->getPrivateKey($key);
+			} elseif (
+				$key instanceof \MTM\Encrypt\Models\RSA\PrivateKey === false
+			) {
+				throw new \Exception("Not handled for key input");
 			}
 			if (is_object($ctrlObj) === false) {
 				$newBase	= true;
@@ -88,6 +92,7 @@ class Shells extends Base
 		$osTool		= \MTM\Utilities\Factories::getSoftware()->getOsTool();
 		if ($osTool->getType() == "linux") {
 			$ctrlObj	= \MTM\Shells\Factories::getShells()->getBash();
+			
 			//trap the ssh conn exit, that way the user cannot drop into a local shell they did not create
 			$strCmd		= "trap \"trap - SIGCHLD; echo mtm-forced-exit; exit\" SIGCHLD";
 			$ctrlObj->getCmd($strCmd)->get();
