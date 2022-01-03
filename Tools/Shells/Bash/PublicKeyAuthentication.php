@@ -21,21 +21,25 @@ class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 	{
 		$toSecs	= ceil($timeout / 1000);
 		if ($ctrlObj->getParent() === null) {
+			//on base shell use the regular file class. SSH shell factory wraps shell in SIGCHLD trap so we are only allowed to call
+			//a single command or we are forced to exit. Hence we cannot place a key using the shell
 			$keyFile	= \MTM\FS\Factories::getFiles()->getTempFile("pem")->setContent($keyObj->get());
-			$keyFile->setMode("0600");
+			$keyFile->setMode("0600"); //keys need 600 perm before ssh will use them
 			$strCmd	= "ssh";
 			$strCmd	.= " -i \"".$keyFile->getPathAsString()."\"";
 		} else {
+			
+			//place the encrypted key on the remote server
 			$dirObj	= $ctrlObj->getTempDirectory();
-			if ($dirObj === null) {
-				throw new \Exception("Missing writable directory on remote, cannot save key file");
-			}
-			$strCmd	= "mtmKey=\$(mktemp --tmpdir=".$dirObj->getPathAsString().");";
+			$strCmd	= "mtmKey=\$(mktemp --tmpdir=".$dirObj->getPathAsString().");"; //sets 600 perms by default
 			$strCmd	.= " echo -n '";
 			$strCmd	.= base64_encode($keyObj->get());
 			$strCmd	.= "' | base64 -d > \$mtmKey;";
-			$strCmd	.= " ( nohup sh -c 'sleep ".$toSecs."s && rm -rf \"\$0\"; ' \$mtmKey & ) > /dev/null 2>&1;";
-			$strCmd	.= " ssh";
+			//make sure we clean up after our selves
+			$strCmd	.= " ( nohup sh -c 'sleep ".$toSecs."s && rm -rf \"\$0\"; ' \$mtmKey & ) > /dev/null 2>&1;"; 
+			$ctrlObj->getCmd($strCmd)->get();
+			
+			$strCmd	= "ssh";
 			$strCmd	.= " -i \$mtmKey";
 		}
 
