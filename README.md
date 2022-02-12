@@ -9,6 +9,13 @@ Then use the second device to connect to a third device (linux or routeros) and 
 
 You can execute any command you want. There is full parity with the underlying shells
 
+## Install:
+
+```
+composer require merlinthemagic/mtm-ssh
+
+```
+
 #### Get a remote shell on a linux server using password
 ```
 $ctrlObj	= \MTM\SSH\Factories::getShells()->passwordAuthentication("IpAddress", "username", "password");
