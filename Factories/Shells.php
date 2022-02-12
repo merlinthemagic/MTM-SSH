@@ -97,6 +97,7 @@ class Shells extends Base
 			$strCmd		= "trap \"trap - SIGCHLD; echo mtm-forced-exit; exit\" SIGCHLD";
 			$ctrlObj->getCmd($strCmd)->get();
 			return $ctrlObj;
+			
 		} else {
 			throw new \Exception("Not handled");
 		}

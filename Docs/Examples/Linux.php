@@ -41,4 +41,16 @@ class Linux
 		}
 		return $this->_ctrlObj;
 	}
+	public function copyFolderWithScp()
+	{
+		$srcDir			= "/tmp/myFiles";
+		$dstDir			= "/tmp/remoteFiles";
+		$remoteHost		= "10.20.30.40";
+		$username		= "myUser";
+		$password		= "secret";
+		$port			= 22;
+		
+		return $this->getConnection()->scpFolderByPassword($srcDir, $dstDir, $remoteHost, $username, $password, $port);
+	}
+	
 }
