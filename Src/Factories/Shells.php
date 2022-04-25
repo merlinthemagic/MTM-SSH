@@ -8,14 +8,13 @@ class Shells extends Base
 	{
 		try {
 			//generic password authentication
-			if (is_object($ip) === false) {
+			$newBase	= false;
+			if ($ip instanceof \MTM\Network\Models\Ip\V4Address === false) {
 				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
 			}
-			if (is_object($ctrlObj) === false) {
+			if ($ctrlObj === null) {
 				$newBase	= true;
 				$ctrlObj	= $this->getBaseShell();
-			} else {
-				$newBase	= false;
 			}
 			return $this->getTool($ctrlObj)->passwordAuthenticate($ctrlObj, $ip, $user, $pass, $port, $timeout);
 			
@@ -30,7 +29,8 @@ class Shells extends Base
 	{
 		try {
 			//generic public key authentication
-			if (is_object($ip) === false) {
+			$newBase	= false;
+			if ($ip instanceof \MTM\Network\Models\Ip\V4Address === false) {
 				$ip		= \MTM\Network\Factories::getIp()->getIpFromString($ip);
 			}
 			if (is_string($key) === true) {
@@ -40,11 +40,9 @@ class Shells extends Base
 			) {
 				throw new \Exception("Not handled for key input");
 			}
-			if (is_object($ctrlObj) === false) {
+			if ($ctrlObj === null) {
 				$newBase	= true;
 				$ctrlObj	= $this->getBaseShell();
-			} else {
-				$newBase	= false;
 			}
 			return $this->getTool($ctrlObj)->publicKeyAuthenticate($ctrlObj, $ip, $user, $key, $port, $timeout);
 		

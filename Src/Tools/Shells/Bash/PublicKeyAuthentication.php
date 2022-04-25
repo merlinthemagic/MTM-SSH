@@ -2,7 +2,7 @@
 //© 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\Bash;
 
-class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
+abstract class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 {
 	protected function keyConnect($ctrlObj, $ipObj, $userName, $keyObj, $port=22, $timeout=30000)
 	{

@@ -2,7 +2,7 @@
 //© 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\Bash;
 
-class Destination extends PasswordAuthentication
+abstract class Destination extends Get
 {
 	public function getDestinationShell($ctrlObj, $userName)
 	{

@@ -12,4 +12,8 @@ class Actions extends Destination
 	{
 		return $this->keyConnect($ctrlObj, $ipObj, $userName, $keyObj, $port, $timeout);
 	}
+	public function getRemoteSoftwareVersion($ctrlObj, $ipObj, $port=22, $timeout=30000)
+	{
+		return $this->remoteVersion($ctrlObj, $ipObj, $port, $timeout);
+	}
 }

@@ -2,7 +2,7 @@
 //© 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\Bash;
 
-class PasswordAuthentication extends PublicKeyAuthentication
+abstract class PasswordAuthentication extends PublicKeyAuthentication
 {
 	protected function passwordConnect($ctrlObj, $ipObj, $userName, $password, $port=22, $timeout=30000)
 	{

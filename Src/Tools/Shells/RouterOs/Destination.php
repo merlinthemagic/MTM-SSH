@@ -17,7 +17,8 @@ class Destination extends PasswordAuthentication
 		$childObj->setParent($ctrlObj);
 		$ctrlObj->setChild($childObj);
 		//init the shell, we are already logged in
-		$childObj->getCmd(":put MTM")->get();
+		$childObj->getCmd(":put MTM;")->get();
+		$childObj->resetPrompt();
 		return $childObj;
 	}
 }

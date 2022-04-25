@@ -10,7 +10,7 @@ abstract class PasswordCopy extends Base
 		//the -T option is needed to correct an issue when connecting to Windows OPENSSH
 		//but we cannot set it or connections to linux/routeros etc have issues
 		//https://github.com/PowerShell/Win32-OpenSSH/issues/712
-		
+
 		$strCmd	= "scp";
 		$strCmd	.= " -o NumberOfPasswordPrompts=1";
 		$strCmd	.= " -o ConnectTimeout=" .ceil($timeout / 1000). "";
@@ -67,7 +67,7 @@ abstract class PasswordCopy extends Base
 			$rType			= null;
 			$lastHash		= "";
 			$staticCount	= 0; //how many times in the loop have we received no change in the return
-			$maxStatic		= 10; //how many time can the output hash to the same thing before we consider the transfer stalled?
+			$maxStatic		= 25; //how many time can the output hash to the same thing before we consider the transfer stalled? EU to US, 10 is too little @ .25
 			$mSleep			= 250000; //how many micro secs to sleep each time we are "not done" this + maxStatic makes this more or less responsive (and more or less CPU intensive)
 			
 			$cmdObj->exec();
