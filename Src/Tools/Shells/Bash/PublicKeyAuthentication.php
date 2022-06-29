@@ -61,12 +61,17 @@ abstract class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 		$strCmd	.= " -o \"GSSAPIAuthentication no\"";
 		$strCmd	.= " ".$userName."@".$ipObj->getAsString("std", false);
 
+		$rawUser	= $userName;
+		if (preg_match("/(.+?)\+ct1000w1000h$/", $userName, $raw) === 1) {
+			//mikrotik formatted username
+			$rawUser	= $raw[1];
+		}
+		
 		$regExs	= array(
 				$userName."@"										=> "linux",
 				"Enter passphrase for key"							=> "keyAuth",
 				"Microsoft Corporation"								=> "windows",
-				"Do you want to see the software license"			=> "routeros",
-				"Use command at the base level"						=> "routeros",
+				"\[".$rawUser."\@(.+?)\] \>"						=> "routeros",
 				"No route to host"									=> "error",
 				"Could not resolve hostname"						=> "error",
 				"Connection reset by peer"							=> "error",

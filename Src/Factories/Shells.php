@@ -69,6 +69,8 @@ class Shells extends Base
 			return $this->getBashTool();
 		} elseif ($ctrlObj->getType() == "routeros") {
 			return $this->getRouterOsTool();
+		} else {
+			throw new Exception("Hot handled for shell type: ".$ctrlObj->getType());
 		}
 	}
 	public function getBashTool()

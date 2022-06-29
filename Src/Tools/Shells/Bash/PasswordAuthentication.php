@@ -18,7 +18,6 @@ abstract class PasswordAuthentication extends PublicKeyAuthentication
 		//the -T option is needed to correct an issue when connecting to Windows OPENSSH
 		//but we cannot set it or connections to linux/routeros etc have issues
 		//https://github.com/PowerShell/Win32-OpenSSH/issues/712
-		
 		$strCmd	= "ssh";
 		$strCmd	.= " -p " . $port;
 		$strCmd	.= " -o \"NumberOfPasswordPrompts 1\"";
@@ -37,12 +36,16 @@ abstract class PasswordAuthentication extends PublicKeyAuthentication
 		$strCmd	.= " -o \"GSSAPIAuthentication no\"";
 		$strCmd	.= " ".$userName."@".$ipObj->getAsString("std", false);
 		
+		$rawUser	= $userName;
+		if (preg_match("/(.+?)\+ct1000w1000h$/", $userName, $raw) === 1) {
+			//mikrotik formatted username
+			$rawUser	= $raw[1];
+		}
+
 		$regExs	= array(
 				$ipObj->getAsString("std", false) . "'s password:"	=> "pwAuth",
 				"Microsoft Corporation"								=> "windows",
-				"Do you want to see the software license"			=> "routeros",
-				"Use command at the base level"						=> "routeros",
-				"No route to host"									=> "error",
+				"\[".$rawUser."\@(.+?)\] \>"						=> "routeros",
 				"Could not resolve hostname"						=> "error",
 				"Connection reset by peer"							=> "error",
 				"Connection timed out"								=> "error",

@@ -19,11 +19,16 @@ class PasswordAuthentication extends PublicKeyAuthentication
 		$strCmd	.= " user=\"".$userName."\"";
 		$strCmd	.= " address=\"".$ipObj->getAsString("std", false) . "\"";
 		
+		$rawUser	= $userName;
+		if (preg_match("/(.+?)\+ct1000w1000h$/", $userName, $raw) === 1) {
+			//mikrotik formatted username
+			$rawUser	= $raw[1];
+		}
+		
 		$regExs	= array(
 				"password:"											=> "pwAuth",
 				"Microsoft Corporation"								=> "windows",
-				"Do you want to see the software license"			=> "routeros",
-				"Use command at the base level"						=> "routeros",
+				"\[".$rawUser."\@(.+?)\] \>"						=> "routeros",
 				"No route to host"									=> "error",
 				"Connection timed out"								=> "error",
 				$userName . "@"										=> "linux"
