@@ -29,6 +29,7 @@ class PasswordAuthentication extends PublicKeyAuthentication
 				"password:"											=> "pwAuth",
 				"Microsoft Corporation"								=> "windows",
 				"\[".$rawUser."\@(.+?)\] \>"						=> "routeros",
+				"Do you want to see the software license\?"			=> "routeros",
 				"No route to host"									=> "error",
 				"Connection timed out"								=> "error",
 				$userName . "@"										=> "linux"
@@ -67,7 +68,7 @@ class PasswordAuthentication extends PublicKeyAuthentication
 			
 		} elseif ($rType == "routeros") {
 			
-			if ($rValue == "Do you want to see the software license") {
+			if ($rValue == "Do you want to see the software license\?") {
 				//we are the only ones with the information needed to clear the prompt
 				//if we dont clear it here the Destination function will have a hell of a time figuring out whats going on
 				$strCmd	= "n";
