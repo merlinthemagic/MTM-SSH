@@ -1,5 +1,5 @@
 <?php
-//© 2019 Martin Peter Madsen
+//ï¿½ 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\RouterOs;
 
 class PasswordAuthentication extends PublicKeyAuthentication
@@ -113,7 +113,6 @@ class PasswordAuthentication extends PublicKeyAuthentication
 			}
 			
 			return $this->getDestinationShell($ctrlObj, $userName);
-			
 		} 
 		
 		if ($rType == "error") {

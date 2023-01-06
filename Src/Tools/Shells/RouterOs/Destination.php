@@ -1,5 +1,5 @@
 <?php
-//© 2019 Martin Peter Madsen
+//ï¿½ 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\RouterOs;
 
 class Destination extends PasswordAuthentication
@@ -17,8 +17,7 @@ class Destination extends PasswordAuthentication
 		$childObj->setParent($ctrlObj);
 		$ctrlObj->setChild($childObj);
 		//init the shell, we are already logged in
-		$childObj->getCmd(":put MTM;")->get();
-		$childObj->resetPrompt();
+		$childObj->initialize();
 		return $childObj;
 	}
 }
