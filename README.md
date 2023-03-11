@@ -72,6 +72,9 @@ echo $data; //directory and file listing from /var
 ```
 
 #### Start running commands: routeros
+
+NOTE: Disable all echo logging on the device or return might get corrupted if a log message echos into the shell while running a command
+
 ```
 $data		= $ctrlObj->getCmd("/system resource print")->exec()->get();
 echo $data; //list of system resources
