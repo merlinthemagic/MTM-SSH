@@ -1,5 +1,5 @@
 <?php
-//© 2019 Martin Peter Madsen
+//ï¿½ 2019 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\Bash;
 
 abstract class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
@@ -135,9 +135,9 @@ abstract class PublicKeyAuthentication extends \MTM\SSH\Tools\Shells\Base
 			return \MTM\SSH\Factories::getShells()->getRouterOsTool()->getDestinationShell($ctrlObj, $userName);
 			
 		} elseif ($rType == "error") {
-			throw new \Exception("Connect error: " . $rValue);
+			throw new \Exception("Connect error: " . $rValue, 87677);
 		} else {
-			throw new \Exception("Not Handled: " . $rType);
+			throw new \Exception("Not Handled: " . $rType, 87678);
 		}
 	}
 }

@@ -160,9 +160,9 @@ abstract class PasswordAuthentication extends PublicKeyAuthentication
 			return \MTM\SSH\Factories::getShells()->getRouterOsTool()->getDestinationShell($ctrlObj, $userName);
 			
 		} elseif ($rType == "error") {
-			throw new \Exception("Connect error: " . $rValue);
+			throw new \Exception("Connect error: " . $rValue, 87675);
 		} else {
-			throw new \Exception("Not Handled: " . $rType);
+			throw new \Exception("Not Handled: " . $rType, 87676);
 		}
 	}
 }

@@ -116,9 +116,9 @@ class PasswordAuthentication extends PublicKeyAuthentication
 		} 
 		
 		if ($rType == "error") {
-			throw new \Exception("Connect error: " . $rValue);
+			throw new \Exception("Connect error: " . $rValue, 88675);
 		} else {
-			throw new \Exception("Not Handled: " . $rType);
+			throw new \Exception("Not Handled: " . $rType, 88676);
 		}
 	}
 }
