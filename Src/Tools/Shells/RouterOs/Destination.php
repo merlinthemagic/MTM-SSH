@@ -11,7 +11,7 @@ class Destination extends PasswordAuthentication
 			//we cannot know wht we are connecting to ahead of time, so its up to you
 			//to pass the username through the following function before connecting to routerOS
 			//use: \MTM\SSH\Factories::getShells()->getRouterOsTool()->getFormattedUsername($userName);
-			throw new \Exception("Username is invalid for RouterOs");
+			throw new \Exception("Username is invalid for RouterOs. Format before using: \MTM\SSH\Factories::getShells()->getRouterOsTool()->getFormattedUsername(\$userName)", 1111);
 		}
 		$childObj	= \MTM\SSH\Factories::getShells()->getRouterOs();
 		$childObj->setParent($ctrlObj);
