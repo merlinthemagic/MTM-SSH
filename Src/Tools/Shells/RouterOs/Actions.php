@@ -1,5 +1,5 @@
 <?php
-//© 2019 Martin Peter Madsen
+//ï¿½ 2026 Martin Peter Madsen
 namespace MTM\SSH\Tools\Shells\RouterOs;
 
 class Actions extends Destination
